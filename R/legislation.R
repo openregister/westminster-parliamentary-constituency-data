@@ -63,7 +63,7 @@ sct2005 %>%
   mutate(name = str_replace(name, " Burgh Constituency$", ""),
          name = str_replace(name, " County Constituency$", ""),
          `westminster-parliamentary-constituency` = row_number() + 700,
-         `start-date` = "2010-04-12",
+         `start-date` = "2005-05-05",
          `end-date` = NA) %>%
   arrange(name) %>%
   select(`westminster-parliamentary-constituency`, everything()) %>%
