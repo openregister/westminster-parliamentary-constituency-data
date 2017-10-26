@@ -85,18 +85,21 @@ nir2008 %>%
   select(`westminster-parliamentary-constituency`, everything()) %>%
   write_tsv(here("lists", "legislation", "constituencies-nir-2008.tsv"), na = "")
 
-wls2007 <- read_html("http://www.legislation.gov.uk/uksi/2007/171/schedule/made")
+wls2006 <- read_html("http://www.legislation.gov.uk/uksi/2006/1041/schedule/1/made")
 
-wls2007 %>%
+wls2006 %>%
   html_table(header = FALSE) %>%
-  purrr::pluck(1) %>%
+  bind_rows() %>%
   rename(name = X1) %>%
   select(name) %>%
-  filter(!str_detect(tolower(name), "name of county constituency"),
-         name != "1") %>%
-  mutate(`westminster-parliamentary-constituency` = row_number() + 900,
+  filter(!str_detect(tolower(name), "name and designation"),
+         !str_detect(tolower(name), "^in ")) %>%
+  mutate(name = str_replace(name, " County Constituency", ""),
+         name = str_replace(name, " County Constitutency", ""),
+         name = str_replace(name, " Borough Constituency", ""),
+         `westminster-parliamentary-constituency` = row_number() + 900,
          `start-date` = "2010-04-12",
          `end-date` = NA) %>%
   arrange(name) %>%
   select(`westminster-parliamentary-constituency`, everything()) %>%
-  write_tsv(here("lists", "legislation", "constituencies-wls-2007.tsv"), na = "")
+  write_tsv(here("lists", "legislation", "constituencies-wls-2006.tsv"), na = "")
