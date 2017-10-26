@@ -19,6 +19,7 @@ eng2007 %>%
          !str_detect(tolower(name), "name and designation"),
          !str_detect(tolower(name), "the london borough"),
          name != toupper(name)) %>%
+  arrange(name) %>%
   mutate(name = str_replace_all(name, "\\r\\n", " "),
          name = str_replace_all(name, "\\r", " "),
          name = str_replace_all(name, " \\(county.*", ""),
@@ -26,7 +27,6 @@ eng2007 %>%
          `westminster-parliamentary-constituency` = row_number() + 100,
          `start-date` = "2010-04-12",
          `end-date` = NA) %>%
-  arrange(name) %>%
   select(`westminster-parliamentary-constituency`, everything()) %>%
   write_tsv(here("lists", "legislation", "constituencies-eng-2007.tsv"), na = "")
 
@@ -41,6 +41,7 @@ eng2009 %>%
          !str_detect(tolower(name), "name and designation"),
          !str_detect(tolower(name), "the london borough"),
          name != toupper(name)) %>%
+  arrange(name) %>%
   mutate(name = str_replace_all(name, "\\r\\n", " "),
          name = str_replace_all(name, "\\r", " "),
          name = str_replace_all(name, " \\(county.*", ""),
@@ -48,6 +49,5 @@ eng2009 %>%
          `westminster-parliamentary-constituency` = NA, # complete manually
          `start-date` = "2010-04-12",
          `end-date` = NA) %>%
-  arrange(name) %>%
   select(`westminster-parliamentary-constituency`, everything()) %>%
   write_tsv(here("lists", "legislation", "constituencies-eng-2009.tsv"), na = "")
