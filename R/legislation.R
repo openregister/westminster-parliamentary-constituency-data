@@ -51,3 +51,19 @@ eng2009 %>%
          `end-date` = NA) %>%
   select(`westminster-parliamentary-constituency`, everything()) %>%
   write_tsv(here("lists", "legislation", "constituencies-eng-2009.tsv"), na = "")
+
+sct2005 <- read_html("http://www.legislation.gov.uk/uksi/2005/250/schedule/made")
+
+sct2005 %>%
+  html_table(header = FALSE) %>%
+  purrr::pluck(1) %>%
+  rename(name = X1) %>%
+  select(name) %>%
+  mutate(name = str_replace(name, " Burgh Constituency$", ""),
+         name = str_replace(name, " County Constituency$", ""),
+         `westminster-parliamentary-constituency` = row_number() + 700,
+         `start-date` = "2010-04-12",
+         `end-date` = NA) %>%
+  arrange(name) %>%
+  select(`westminster-parliamentary-constituency`, everything()) %>%
+  write_tsv(here("lists", "legislation", "constituencies-sct-2005.tsv"), na = "")
