@@ -1,9 +1,8 @@
 # Compare the legislation.gov.uk and mnis lists of constituencies.
 
-# * mnis includes constitencies from other legislation for Scotland, Wales, and
-#     Northern Ireland.
-# * mnis uses the 2010-05-06 election date as the start of constituencies,
-#   rather than the dissolution date 2010-04-12.
+# * mnis does not include Scottish constituencies
+# * mnis uses the 2010-05-06 election date as the start of constituencies in
+#     England, rather than the dissolution date 2010-04-12.
 # * mnis spells "Weston-Super-Mare" as "Weston-super-Mare", which is probably
 #     correct.
 # * mnis spells "Birmingham,Yardley" as "Birmingham, Yardley", which is probably
@@ -18,10 +17,24 @@ mnis <-
   filter(start_date == ymd("2010-05-06")) %>%
   select(constituency_id, name)
 
-legislation <-
-  read_tsv(here("lists", "legislation", "constituencies-2007.tsv")) %>%
+leg_eng <-
+  read_tsv(here("lists", "legislation", "constituencies-eng-2007.tsv")) %>%
   select(`westminster-parliamentary-constituency`, name)
 
-both <- inner_join(mnis, legislation, by = "name")
-mnis_only <- anti_join(mnis, legislation, by = "name")
-legislation_only <- anti_join(legislation, mnis, by = "name")
+leg_sct <-
+  read_tsv(here("lists", "legislation", "constituencies-sct-2005.tsv")) %>%
+  select(`westminster-parliamentary-constituency`, name)
+
+leg_wls <-
+  read_tsv(here("lists", "legislation", "constituencies-wls-2006.tsv")) %>%
+  select(`westminster-parliamentary-constituency`, name)
+
+leg_nir <-
+  read_tsv(here("lists", "legislation", "constituencies-nir-2008.tsv")) %>%
+  select(`westminster-parliamentary-constituency`, name)
+
+leg <- bind_rows(leg_eng, leg_wls, leg_nir)
+
+both <- inner_join(mnis, leg, by = "name")
+mnis_only <- anti_join(mnis, leg, by = "name")
+legislation_only <- anti_join(leg, mnis, by = "name")
