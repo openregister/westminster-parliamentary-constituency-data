@@ -84,3 +84,19 @@ nir2008 %>%
   arrange(name) %>%
   select(`westminster-parliamentary-constituency`, everything()) %>%
   write_tsv(here("lists", "legislation", "constituencies-nir-2008.tsv"), na = "")
+
+wls2007 <- read_html("http://www.legislation.gov.uk/uksi/2007/171/schedule/made")
+
+wls2007 %>%
+  html_table(header = FALSE) %>%
+  purrr::pluck(1) %>%
+  rename(name = X1) %>%
+  select(name) %>%
+  filter(!str_detect(tolower(name), "name of county constituency"),
+         name != "1") %>%
+  mutate(`westminster-parliamentary-constituency` = row_number() + 900,
+         `start-date` = "2010-04-12",
+         `end-date` = NA) %>%
+  arrange(name) %>%
+  select(`westminster-parliamentary-constituency`, everything()) %>%
+  write_tsv(here("lists", "legislation", "constituencies-wls-2007.tsv"), na = "")
