@@ -68,3 +68,19 @@ sct2005 %>%
   arrange(name) %>%
   select(`westminster-parliamentary-constituency`, everything()) %>%
   write_tsv(here("lists", "legislation", "constituencies-sct-2005.tsv"), na = "")
+
+nir2008 <- read_html("http://www.legislation.gov.uk/uksi/2008/1486/schedule/made")
+
+nir2008 %>%
+  html_table(header = FALSE) %>%
+  purrr::pluck(1) %>%
+  rename(name = X1) %>%
+  select(name) %>%
+  filter(!str_detect(tolower(name), "name and designation")) %>%
+  mutate(name = str_replace(name, " \\(.*", ""),
+         `westminster-parliamentary-constituency` = row_number() + 800,
+         `start-date` = "2010-04-12",
+         `end-date` = NA) %>%
+  arrange(name) %>%
+  select(`westminster-parliamentary-constituency`, everything()) %>%
+  write_tsv(here("lists", "legislation", "constituencies-nir-2008.tsv"), na = "")
