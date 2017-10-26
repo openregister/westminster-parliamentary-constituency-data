@@ -59,6 +59,7 @@ sct2005 %>%
   purrr::pluck(1) %>%
   rename(name = X1) %>%
   select(name) %>%
+  filter(!str_detect(tolower(name), "name and designation")) %>%
   mutate(name = str_replace(name, " Burgh Constituency$", ""),
          name = str_replace(name, " County Constituency$", ""),
          `westminster-parliamentary-constituency` = row_number() + 700,
