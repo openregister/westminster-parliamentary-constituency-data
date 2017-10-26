@@ -8,9 +8,9 @@ library(rvest)
 library(stringr)
 library(here)
 
-x2007 <- read_html("http://www.legislation.gov.uk/uksi/2007/1681/schedule/made")
+eng2007 <- read_html("http://www.legislation.gov.uk/uksi/2007/1681/schedule/made")
 
-x2007 %>%
+eng2007 %>%
   html_table(header = FALSE) %>%
   bind_rows() %>%
   rename(name = X1) %>%
@@ -28,11 +28,11 @@ x2007 %>%
          `end-date` = NA) %>%
   arrange(name) %>%
   select(`westminster-parliamentary-constituency`, everything()) %>%
-  write_tsv(here("lists", "legislation", "constituencies-2007.tsv"), na = "")
+  write_tsv(here("lists", "legislation", "constituencies-eng-2007.tsv"), na = "")
 
-x2009 <- read_html("http://www.legislation.gov.uk/uksi/2009/698/schedule/made")
+eng2009 <- read_html("http://www.legislation.gov.uk/uksi/2009/698/schedule/made")
 
-x2009 %>%
+eng2009 %>%
   html_table(header = FALSE) %>%
   bind_rows() %>%
   rename(name = X1) %>%
@@ -50,4 +50,4 @@ x2009 %>%
          `end-date` = NA) %>%
   arrange(name) %>%
   select(`westminster-parliamentary-constituency`, everything()) %>%
-  write_tsv(here("lists", "legislation", "constituencies-2009.tsv"), na = "")
+  write_tsv(here("lists", "legislation", "constituencies-eng-2009.tsv"), na = "")
